@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CryptoNews</string>
+    <string name="retry">Retry</string>
+    <string name="refresh">Refresh</string>
+    <string name="usd_price">$%1$s</string>
+
+</resources>

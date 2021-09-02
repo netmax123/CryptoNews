@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.dvinasystems.cryptonews.BaseApplication
+import com.dvinasystems.cryptonews.data.Coin
 import com.dvinasystems.cryptonews.databinding.FragmentCoinsBinding
 import com.dvinasystems.cryptonews.utils.RequestState
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,20 +37,29 @@ class CoinsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.refresh.setOnClickListener {
-            Toast.makeText(requireContext(), "CoinGecko API is updated every 1 to 10 minutes", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                "CoinGecko API is updated every 1 to 10 minutes",
+                Toast.LENGTH_SHORT).show()
             viewModel.request()
         }
 
-        viewModel.coins.observe(viewLifecycleOwner, {
-            when (it) {
+        viewModel.coins.observe(viewLifecycleOwner, { data ->
+            when (data) {
                 is RequestState.Loading -> binding.progressBar.visibility = View.VISIBLE
                 is RequestState.Success -> {
-                    binding.recyclerView.adapter = CoinAdapter(it.body, applicationContext)
+                    binding.recyclerView.adapter = CoinAdapter(data.body, applicationContext) {
+                        onCoinClick(it)
+                    }
                     binding.progressBar.visibility = View.GONE
                 }
             }
         })
 
+    }
+
+    private fun onCoinClick(coin: Coin) {
+        findNavController().navigate(CoinsFragmentDirections.actionCoinsFragmentToCoinDetailsFragment(
+            coin))
     }
 
     override fun onDestroyView() {

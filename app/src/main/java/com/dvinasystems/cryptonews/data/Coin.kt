@@ -1,8 +1,11 @@
 package com.dvinasystems.cryptonews.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-data class CoinData(
+@Parcelize
+data class Coin(
 
     val id: String? = null,
     val symbol: String? = null,
@@ -11,4 +14,4 @@ data class CoinData(
     @SerializedName("current_price")
     val currentPrice: Float
 
-)
+):Parcelable
